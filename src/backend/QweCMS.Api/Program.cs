@@ -1,8 +1,23 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using QweCMS.Infrastructure.Data;
+using QweCMS.Infrastructure.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure MongoDB
+builder.Services.Configure<MongoSettings>(
+    builder.Configuration.GetSection("ConnectionStrings:MongoDB"));
+
+// Add MongoDB context
+builder.Services.AddSingleton<MongoDbContext>();
+
+// Add logging
+builder.Services.AddLogging(builder.Configuration);
 
 var app = builder.Build();
 
