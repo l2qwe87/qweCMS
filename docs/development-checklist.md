@@ -9,16 +9,16 @@
 - [x] Настроить Angular контейнер с Nginx
 - [x] Добавить environment variables конфигурацию в `deployment/config/.env`
 - [x] Проверить запуск MongoDB контейнера командой `docker-compose -f deployment/docker-compose.yml up -d mongodb`
-- [ ] Проверить запуск всех контейнеров командой `docker-compose -f deployment/docker-compose.yml up`
+- [x] Проверить запуск всех контейнеров командой `docker-compose -f deployment/docker-compose.yml up`
 
 ### 2. Создать структуру .NET solution
-- [ ] Создать solution файл `QweCMS.sln`
-- [ ] Создать проект `QweCMS.Api` (Web API)
-- [ ] Создать проект `QweCMS.Core` (Class Library)
-- [ ] Создать проект `QweCMS.Infrastructure` (Class Library)
-- [ ] Создать проект `QweCMS.Tests` (xUnit Test Project)
-- [ ] Настроить зависимости между проектами
-- [ ] Добавить базовые NuGet пакеты
+- [x] Создать solution файл `QweCMS.sln`
+- [x] Создать проект `QweCMS.Api` (Web API)
+- [x] Создать проект `QweCMS.Core` (Class Library)
+- [x] Создать проект `QweCMS.Infrastructure` (Class Library)
+- [x] Создать проект `QweCMS.Tests` (xUnit Test Project)
+- [x] Настроить зависимости между проектами
+- [x] Добавить базовые NuGet пакеты
 
 ### 3. Настроить MongoDB подключение
 - [ ] Установить `MongoDB.Driver` NuGet пакет
@@ -148,6 +148,9 @@
 - [x] Настроить environment variables для production в `deployment/config/.env`
 - [x] Добавить логирование в контейнеры
 - [x] Создать docker-compose.yml с production профилем в `deployment/`
+- [x] Исправить Swashbuckle версию для .NET 8
+- [x] Добавить Swagger UI в Production режиме
+- [x] Упростить Program.cs с базовыми эндпоинтами
 
 ### 18. Написать unit тесты
 - [ ] Написать тесты для `SchemaCompositionService`
@@ -170,7 +173,7 @@
 ## 📊 Общий прогресс
 
 ### Фаза 1: Инфраструктура
-- [x] 5/6 задач выполнено (83%)
+- [x] 6/6 задач выполнено (100%)
 
 ### Фаза 2: Основной функционал  
 - [ ] 0/9 задач выполнено (0%)
@@ -179,7 +182,7 @@
 - [x] 2/5 задач выполнено (40%)
 
 ### Итоговый прогресс
-- [x] 7/20 задач выполнено (35%)
+- [x] 8/20 задач выполнено (40%)
 
 ---
 
@@ -192,7 +195,10 @@
 - [ ] Базовая аутентификация и авторизация
 - [ ] Публичная часть отображает контент
 - [ ] Все тесты проходят
-- [x] Документация завершена
+- [x] Docker окружение поднимается одной командой
+- [x] Backend API работает в Docker с .NET 8
+- [x] Swagger UI доступен в Production режиме
+- [x] Health checks работают корректно
 
 ---
 
