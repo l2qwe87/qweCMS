@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using QweCMS.Infrastructure.Data;
-using QweCMS.Infrastructure.Settings;
+using QweCMS.Core.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,7 @@ builder.Services.Configure<MongoSettings>(
 builder.Services.AddSingleton<MongoDbContext>();
 
 // Add logging
-builder.Services.AddLogging(builder.Configuration);
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

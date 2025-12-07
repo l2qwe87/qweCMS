@@ -45,7 +45,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
 
     public async Task<T> UpdateAsync(string id, T entity)
     {
-        var filter = Builders<T>.Filter.Eq(x => x.Id == id);
+        var filter = Builders<T>.Filter.Eq(x => x.Id, id);
         
         entity.UpdatedAt = DateTime.UtcNow;
         
@@ -55,7 +55,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
 
     public async Task<bool> DeleteAsync(string id)
     {
-        var filter = Builders<T>.Filter.Eq(x => x.Id == id);
+        var filter = Builders<T>.Filter.Eq(x => x.Id, id);
         
         var result = await _collection.DeleteOneAsync(filter);
         return result.DeletedCount > 0;

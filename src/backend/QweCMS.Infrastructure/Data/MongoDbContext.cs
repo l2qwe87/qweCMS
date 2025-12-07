@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using MongoDB.Bson.Serialization.Attributes;
 using Microsoft.Extensions.Options;
 using QweCMS.Core.Entities;
+using QweCMS.Core.Settings;
 
 namespace QweCMS.Infrastructure.Data;
 
