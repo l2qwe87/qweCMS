@@ -10,8 +10,6 @@ public class SchemaEntity : BaseEntity
     public string Collection { get; set; } = string.Empty;
     public List<MixinReference> Mixins { get; set; } = new List<MixinReference>();
     public object Schema { get; set; } = new { };
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
 }
 
 public class MixinReference
