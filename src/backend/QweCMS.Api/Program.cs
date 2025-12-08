@@ -3,11 +3,15 @@ using QweCMS.Core.Settings;
 using QweCMS.Infrastructure.Repositories;
 using QweCMS.Core.Services;
 using QweCMS.Infrastructure.Services;
+using QweCMS.Api.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -31,6 +35,9 @@ builder.Services.AddScoped<IMixinRepository, MixinRepository>();
 
 // Add logging
 builder.Services.AddLogging();
+
+// Add global exception filter
+builder.Services.AddScoped<GlobalExceptionFilter>();
 
 var app = builder.Build();
 
