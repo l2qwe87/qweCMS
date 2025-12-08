@@ -4,27 +4,22 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 # Копируем package files
-COPY package*.json ./
-COPY src/frontend/package*.json ./src/frontend/
+COPY src/frontend/package*.json ./
 
 # Устанавливаем зависимости
-RUN npm ci --only=production
+RUN npm ci
 
 # Копируем исходный код
-COPY . .
+COPY src/frontend/ ./
 
 # Собираем Angular приложение
-WORKDIR /app/src/frontend
-RUN npm run build --prod
+RUN npm run build --configuration=production
 
 # Production stage
 FROM nginx:alpine
 
 # Копируем собранные файлы в nginx
-COPY --from=build /app/src/frontend/dist/qwe-cms /usr/share/nginx/html
-
-# Копируем конфигурацию nginx
-COPY deployment/docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/dist/qwe-cms /usr/share/nginx/html
 
 EXPOSE 80
 
