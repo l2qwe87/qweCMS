@@ -7,12 +7,14 @@ public class SchemaService : ISchemaService
 {
     private readonly ISchemaRepository _repository;
     private readonly IMixinService _mixinService;
+    private readonly ISchemaCompositionService _compositionService;
     private readonly IJsonSchemaValidationService _validationService;
 
-    public SchemaService(ISchemaRepository repository, IMixinService mixinService, IJsonSchemaValidationService validationService)
+    public SchemaService(ISchemaRepository repository, IMixinService mixinService, ISchemaCompositionService compositionService, IJsonSchemaValidationService validationService)
     {
         _repository = repository;
         _mixinService = mixinService;
+        _compositionService = compositionService;
         _validationService = validationService;
     }
 
@@ -196,22 +198,7 @@ public class SchemaService : ISchemaService
             return OperationResult<object>.Failure(error, "Schema not found");
         }
 
-        try
-        {
-            // Базовая реализация - просто возвращаем схему
-            // В будущем здесь будет логика компоновки с миксинами
-            return OperationResult<object>.Success(schema.Schema, "Composed schema retrieved successfully");
-        }
-        catch (Exception ex)
-        {
-            var error = new ValidationError
-            {
-                Code = "COMPOSITION_ERROR",
-                Message = $"Failed to compose schema: {ex.Message}",
-                PropertyPath = "$"
-            };
-            return OperationResult<object>.Failure(error, "Failed to compose schema");
-        }
+        return await _compositionService.ComposeSchemaAsync(schema);
     }
 
     /// <inheritdoc/>
