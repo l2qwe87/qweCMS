@@ -71,12 +71,18 @@ public class MixinsController : ControllerBase
     /// Создать новый миксин
     /// </summary>
     /// <param name="mixin">Данные миксина для создания</param>
-    /// <returns>Созданный миксин с location header</returns>
+    /// <returns>Результат операции создания</returns>
     [HttpPost]
-    public async Task<ActionResult<MixinEntity>> Create([FromBody] MixinEntity mixin)
+    public async Task<ActionResult<OperationResult<MixinEntity>>> Create([FromBody] MixinEntity mixin)
     {
-        var createdMixin = await _mixinService.CreateAsync(mixin);
-        return CreatedAtAction(nameof(GetById), new { id = createdMixin.Id }, createdMixin);
+        var result = await _mixinService.CreateAsync(mixin);
+        
+        if (result.IsSuccess)
+        {
+            return CreatedAtAction(nameof(GetById), new { id = result.Data?.Id }, result);
+        }
+        
+        return BadRequest(result);
     }
 
     /// <summary>
@@ -84,37 +90,56 @@ public class MixinsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор миксина</param>
     /// <param name="mixin">Обновленные данные миксина</param>
-    /// <returns>Обновленный миксин</returns>
+    /// <returns>Результат операции обновления</returns>
     [HttpPut("{id}")]
-    public async Task<ActionResult<MixinEntity>> Update(string id, [FromBody] MixinEntity mixin)
+    public async Task<ActionResult<OperationResult<MixinEntity>>> Update(string id, [FromBody] MixinEntity mixin)
     {
         if (string.IsNullOrWhiteSpace(id))
-            return BadRequest("ID cannot be empty");
+            return BadRequest(OperationResult<MixinEntity>.Failure(
+                new ValidationError { Code = "INVALID_ID", Message = "ID cannot be empty" }, 
+                "Invalid ID"));
 
         if (mixin == null)
-            return BadRequest("Request body cannot be null");
+            return BadRequest(OperationResult<MixinEntity>.Failure(
+                new ValidationError { Code = "NULL_BODY", Message = "Request body cannot be null" }, 
+                "Invalid request body"));
 
-        var updatedMixin = await _mixinService.UpdateAsync(id, mixin);
-        return Ok(updatedMixin);
+        var result = await _mixinService.UpdateAsync(id, mixin);
+        
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+        
+        return BadRequest(result);
     }
 
     /// <summary>
     /// Удалить миксин по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор миксина</param>
-    /// <returns>204 No Content или 404 если не найден</returns>
+    /// <returns>Результат операции удаления</returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(string id)
+    public async Task<ActionResult<OperationResult<bool>>> Delete(string id)
     {
         if (string.IsNullOrWhiteSpace(id))
-            return BadRequest("ID cannot be empty");
+            return BadRequest(OperationResult<bool>.Failure(
+                new ValidationError { Code = "INVALID_ID", Message = "ID cannot be empty" }, 
+                "Invalid ID"));
 
         var result = await _mixinService.DeleteAsync(id);
-        if (!result)
+        
+        if (result.IsSuccess)
         {
-            return NotFound();
+            return NoContent();
         }
-        return NoContent();
+        
+        if (result.Errors.Any(e => e.Code == "NOT_FOUND"))
+        {
+            return NotFound(result);
+        }
+        
+        return BadRequest(result);
     }
 
     /// <summary>

@@ -27,35 +27,88 @@ public class MixinService : IMixinService
     }
 
     /// <inheritdoc/>
-    public async Task<MixinEntity> CreateAsync(MixinEntity entity)
+    public async Task<OperationResult<MixinEntity>> CreateAsync(MixinEntity entity)
     {
         var validationResult = _validationService.ValidateSchema(entity.Schema);
         if (!validationResult.IsValid)
         {
-            var errorMessage = string.Join("; ", validationResult.Errors.Select(e => e.Message));
-            throw new ArgumentException($"Invalid JSON Schema: {errorMessage}");
+            return OperationResult<MixinEntity>.Failure(validationResult.Errors, "Invalid JSON Schema");
         }
 
-        return await _repository.CreateAsync(entity);
+        try
+        {
+            var createdEntity = await _repository.CreateAsync(entity);
+            return OperationResult<MixinEntity>.Success(createdEntity, "Mixin created successfully");
+        }
+        catch (Exception ex)
+        {
+            var error = new ValidationError
+            {
+                Code = "CREATE_ERROR",
+                Message = $"Failed to create mixin: {ex.Message}",
+                PropertyPath = "$"
+            };
+            return OperationResult<MixinEntity>.Failure(error, "Failed to create mixin");
+        }
     }
 
     /// <inheritdoc/>
-    public async Task<MixinEntity> UpdateAsync(string id, MixinEntity entity)
+    public async Task<OperationResult<MixinEntity>> UpdateAsync(string id, MixinEntity entity)
     {
         var validationResult = _validationService.ValidateSchema(entity.Schema);
         if (!validationResult.IsValid)
         {
-            var errorMessage = string.Join("; ", validationResult.Errors.Select(e => e.Message));
-            throw new ArgumentException($"Invalid JSON Schema: {errorMessage}");
+            return OperationResult<MixinEntity>.Failure(validationResult.Errors, "Invalid JSON Schema");
         }
 
-        return await _repository.UpdateAsync(id, entity);
+        try
+        {
+            var updatedEntity = await _repository.UpdateAsync(id, entity);
+            return OperationResult<MixinEntity>.Success(updatedEntity, "Mixin updated successfully");
+        }
+        catch (Exception ex)
+        {
+            var error = new ValidationError
+            {
+                Code = "UPDATE_ERROR",
+                Message = $"Failed to update mixin: {ex.Message}",
+                PropertyPath = "$"
+            };
+            return OperationResult<MixinEntity>.Failure(error, "Failed to update mixin");
+        }
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteAsync(string id)
+    public async Task<OperationResult<bool>> DeleteAsync(string id)
     {
-        return await _repository.DeleteAsync(id);
+        try
+        {
+            var result = await _repository.DeleteAsync(id);
+            if (result)
+            {
+                return OperationResult<bool>.Success(true, "Mixin deleted successfully");
+            }
+            else
+            {
+                var error = new ValidationError
+                {
+                    Code = "NOT_FOUND",
+                    Message = "Mixin not found",
+                    PropertyPath = "$.id"
+                };
+                return OperationResult<bool>.Failure(error, "Mixin not found");
+            }
+        }
+        catch (Exception ex)
+        {
+            var error = new ValidationError
+            {
+                Code = "DELETE_ERROR",
+                Message = $"Failed to delete mixin: {ex.Message}",
+                PropertyPath = "$"
+            };
+            return OperationResult<bool>.Failure(error, "Failed to delete mixin");
+        }
     }
 
     /// <inheritdoc/>

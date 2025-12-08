@@ -73,23 +73,23 @@ public interface IMixinService
     /// Создать новый миксин с валидацией
     /// </summary>
     /// <param name="entity">Сущность миксина</param>
-    /// <returns>Созданный миксин</returns>
-    Task<MixinEntity> CreateAsync(MixinEntity entity);
+    /// <returns>Результат операции с созданным миксином</returns>
+    Task<OperationResult<MixinEntity>> CreateAsync(MixinEntity entity);
     
     /// <summary>
     /// Обновить существующий миксин с валидацией
     /// </summary>
     /// <param name="id">Идентификатор миксина</param>
     /// <param name="entity">Обновленная сущность</param>
-    /// <returns>Обновленный миксин</returns>
-    Task<MixinEntity> UpdateAsync(string id, MixinEntity entity);
+    /// <returns>Результат операции с обновленным миксином</returns>
+    Task<OperationResult<MixinEntity>> UpdateAsync(string id, MixinEntity entity);
     
     /// <summary>
     /// Удалить миксин по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор миксина</param>
-    /// <returns>True если удален, иначе false</returns>
-    Task<bool> DeleteAsync(string id);
+    /// <returns>Результат операции удаления</returns>
+    Task<OperationResult<bool>> DeleteAsync(string id);
     
     /// <summary>
     /// Валидировать JSON Schema
