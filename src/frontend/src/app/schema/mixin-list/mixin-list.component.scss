@@ -1,0 +1,29 @@
+.mixin-list-container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.mixins-table {
+  width: 100%;
+}
+
+.loading, .no-data {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.no-data {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+}
