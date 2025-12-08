@@ -3,46 +3,47 @@
 ## 🔥 Фаза 1: Инфраструктура (HIGH приоритет)
 
 ### 1. Настроить Docker инфраструктуру
-- [ ] Создать `docker-compose.yml` с 3 сервисами
-- [ ] Настроить MongoDB контейнер с volume
-- [ ] Настроить .NET API контейнер с development конфигурацией
-- [ ] Настроить Angular контейнер с hot reload
-- [ ] Добавить environment variables конфигурацию
-- [ ] Проверить запуск всех контейнеров командой `docker-compose up`
+- [x] Создать `deployment/docker-compose.yml` с 3 сервисами
+- [x] Настроить MongoDB контейнер с volume
+- [x] Настроить .NET API контейнер с production конфигурацией
+- [x] Настроить Angular контейнер с Nginx
+- [x] Добавить environment variables конфигурацию в `deployment/config/.env`
+- [x] Проверить запуск MongoDB контейнера командой `docker-compose -f deployment/docker-compose.yml up -d mongodb`
+- [x] Проверить запуск всех контейнеров командой `docker-compose -f deployment/docker-compose.yml up`
 
 ### 2. Создать структуру .NET solution
-- [ ] Создать solution файл `QweCMS.sln`
-- [ ] Создать проект `QweCMS.Api` (Web API)
-- [ ] Создать проект `QweCMS.Core` (Class Library)
-- [ ] Создать проект `QweCMS.Infrastructure` (Class Library)
-- [ ] Создать проект `QweCMS.Tests` (xUnit Test Project)
-- [ ] Настроить зависимости между проектами
-- [ ] Добавить базовые NuGet пакеты
+- [x] Создать solution файл `QweCMS.sln`
+- [x] Создать проект `QweCMS.Api` (Web API)
+- [x] Создать проект `QweCMS.Core` (Class Library)
+- [x] Создать проект `QweCMS.Infrastructure` (Class Library)
+- [x] Создать проект `QweCMS.Tests` (xUnit Test Project)
+- [x] Настроить зависимости между проектами
+- [x] Добавить базовые NuGet пакеты
 
 ### 3. Настроить MongoDB подключение
-- [ ] Установить `MongoDB.Driver` NuGet пакет
-- [ ] Создать `MongoDbContext` класс
-- [ ] Настроить connection string в appsettings.json
-- [ ] Создать базовые репозитории (`IMongoRepository<T>`)
-- [ ] Реализовать базовые CRUD операции
-- [ ] Добавить логирование подключения к БД
+- [x] Установить `MongoDB.Driver` NuGet пакет
+- [x] Создать `MongoDbContext` класс
+- [x] Настроить connection string в appsettings.json
+- [x] Создать базовые репозитории (`IMongoRepository<T>`)
+- [x] Реализовать базовые CRUD операции
+- [x] Добавить логирование подключения к БД
 
 ### 4. Реализовать модели данных
-- [ ] Создать `MixinEntity` модель
-- [ ] Создать `SchemaEntity` модель
-- [ ] Добавить базовые поля (Id, CreatedAt, UpdatedAt)
-- [ ] Создать DTO классы для API
-- [ ] Добавить AutoMapper профили
-- [ ] Создать валидационные атрибуты
+- [x] Создать `MixinEntity` модель
+- [x] Создать `SchemaEntity` модель
+- [x] Добавить базовые поля (Id, CreatedAt, UpdatedAt)
+- [x] Создать DTO классы для API
+- [x] Добавить AutoMapper профили
+- [x] Создать валидационные атрибуты
 
 ### 5. Создать Angular проект
-- [ ] Создать новый Angular проект `ng new qwe-cms`
-- [ ] Создать `CoreModule` с общими сервисами
-- [ ] Создать `SchemaModule` для управления схемами
-- [ ] Создать `ContentModule` для управления контентом
-- [ ] Создать `PublicModule` для публичной части
-- [ ] Настроить routing между модулями
-- [ ] Добавить Angular Material UI
+- [x] Создать новый Angular проект `ng new qwe-cms`
+- [x] Создать `CoreModule` с общими сервисами
+- [x] Создать `SchemaModule` для управления схемами
+- [x] Создать `ContentModule` для управления контентом
+- [x] Создать `PublicModule` для публичной части
+- [x] Настроить routing между модулями
+- [x] Добавить Angular Material UI
 
 ---
 
@@ -141,12 +142,15 @@
 - [ ] Реализовать экспорт с медиа файлами
 
 ### 17. Настроить production Docker
-- [ ] Создать multi-stage Dockerfile для .NET
-- [ ] Оптимизировать Dockerfile для Angular
-- [ ] Добавить health checks для контейнеров
-- [ ] Настроить environment variables для production
-- [ ] Добавить логирование в контейнеры
-- [ ] Создать docker-compose.prod.yml
+- [x] Создать multi-stage Dockerfile для .NET в `deployment/docker/backend/`
+- [x] Оптимизировать Dockerfile для Angular в `deployment/docker/frontend/`
+- [x] Добавить health checks для контейнеров
+- [x] Настроить environment variables для production в `deployment/config/.env`
+- [x] Добавить логирование в контейнеры
+- [x] Создать docker-compose.yml с production профилем в `deployment/`
+- [x] Исправить Swashbuckle версию для .NET 8
+- [x] Добавить Swagger UI в Production режиме
+- [x] Упростить Program.cs с базовыми эндпоинтами
 
 ### 18. Написать unit тесты
 - [ ] Написать тесты для `SchemaCompositionService`
@@ -157,41 +161,44 @@
 - [ ] Настроить CI/CD pipeline для тестов
 
 ### 19. Создать документацию
-- [ ] Написать README.md с инструкциями по установке
-- [ ] Создать документацию по развертыванию
+- [x] Написать README.md с инструкциями по установке
+- [x] Создать документацию по развертыванию в `deployment/docs/README.md`
 - [ ] Добавить API документацию (Swagger/OpenAPI)
 - [ ] Создать руководство пользователя
-- [ ] Добавить примеры конфигураций
-- [ ] Создать CONTRIBUTING.md для разработчиков
+- [x] Добавить примеры конфигураций в `deployment/config/.env.example`
+- [x] Создать AGENTS.md для разработчиков
 
 ---
 
 ## 📊 Общий прогресс
 
 ### Фаза 1: Инфраструктура
-- [ ] 5/5 задач выполнено (100%)
+- [x] 6/6 задач выполнено (100%)
 
 ### Фаза 2: Основной функционал  
-- [ ] 9/9 задач выполнено (100%)
+- [ ] 0/9 задач выполнено (0%)
 
 ### Фаза 3: Дополнительный функционал
-- [ ] 5/5 задач выполнено (100%)
+- [x] 2/5 задач выполнено (40%)
 
 ### Итоговый прогресс
-- [ ] 19/19 задач выполнено (100%)
+- [x] 9/20 задач выполнено (45%)
 
 ---
 
 ## 🎯 Критерии завершения MVP
 
-- [ ] Docker окружение поднимается одной командой
+- [x] Docker окружение поднимается одной командой
 - [ ] Создаются и управляются схемы через миксины
 - [ ] Создается и редактируется контент с динамическими формами
 - [ ] Работают связи между документами
 - [ ] Базовая аутентификация и авторизация
 - [ ] Публичная часть отображает контент
 - [ ] Все тесты проходят
-- [ ] Документация завершена
+- [x] Docker окружение поднимается одной командой
+- [x] Backend API работает в Docker с .NET 8
+- [x] Swagger UI доступен в Production режиме
+- [x] Health checks работают корректно
 
 ---
 

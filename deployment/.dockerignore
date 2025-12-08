@@ -1,4 +1,13 @@
-# .NET gitignore для backend директории
+# .NET Dockerignore
+# Исключаем файлы, которые не нужны в Docker образе
+
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
 # Build results
 [Dd]ebug/
@@ -11,14 +20,6 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
-
-# Visual Studio
-.vs/
-.vscode/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -34,6 +35,9 @@ bld/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+
+# VS Code
+.vscode/
 
 # Rider
 .idea/
@@ -129,9 +133,24 @@ logs/
 .env.test.local
 .env.production.local
 
-# User Secrets
-appsettings.Development.json
-appsettings.Local.json
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+docs/
+*.md
+
+# Tests
+**/Tests/
+**/*.Tests.csproj
+**/*Test*.cs
+**/*test*.cs
 
 # Temporary files
 *.tmp
