@@ -41,6 +41,8 @@ builder.Services.AddScoped<IMixinService, MixinService>();
 builder.Services.AddScoped<IMixinRepository, MixinRepository>();
 builder.Services.AddScoped<ISchemaService, SchemaService>();
 builder.Services.AddScoped<ISchemaRepository, SchemaRepository>();
+builder.Services.AddScoped<ISchemaCompositionService, SchemaCompositionService>();
+builder.Services.AddScoped<JsonPointerService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(QweCMS.Core.Mapping.SchemaMappingProfile));

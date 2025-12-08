@@ -224,6 +224,225 @@ public class MixinServiceTests
 }
 
 /// <summary>
+/// Тесты для SchemaCompositionService
+/// </summary>
+public class SchemaCompositionServiceTests
+{
+    private readonly Mock<IMixinService> _mockMixinService;
+    private readonly JsonPointerService _jsonPointerService;
+    private readonly SchemaCompositionService _compositionService;
+
+    public SchemaCompositionServiceTests()
+    {
+        _mockMixinService = new Mock<IMixinService>();
+        _jsonPointerService = new JsonPointerService();
+        _compositionService = new SchemaCompositionService(_mockMixinService.Object, _jsonPointerService);
+    }
+
+    [Fact]
+    public async Task ComposeSchema_WithValidSchema_ReturnsComposedSchema()
+    {
+        // Arrange
+        var mixin = new MixinEntity
+        {
+            Name = "test-mixin",
+            Schema = new
+            {
+                type = "object",
+                properties = new
+                {
+                    mixinField = new { type = "string" }
+                }
+            }
+        };
+
+        var schema = new SchemaEntity
+        {
+            Name = "test-schema",
+            Schema = new
+            {
+                type = "object",
+                properties = new
+                {
+                    baseField = new { type = "string" }
+                }
+            },
+            Mixins = new List<MixinReference>
+            {
+                new MixinReference { Name = "test-mixin", Path = "$" }
+            }
+        };
+
+        _mockMixinService.Setup(x => x.GetAllAsync())
+            .ReturnsAsync(new List<MixinEntity> { mixin });
+
+        // Act
+        var result = await _compositionService.ComposeSchemaAsync(schema);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.NotNull(result.Data);
+    }
+
+    [Fact]
+    public async Task ValidateMixinPaths_WithValidPaths_ReturnsSuccess()
+    {
+        // Arrange
+        var schema = new SchemaEntity
+        {
+            Name = "test-schema",
+            Mixins = new List<MixinReference>
+            {
+                new MixinReference { Name = "mixin1", Path = "$" },
+                new MixinReference { Name = "mixin2", Path = "$.properties" }
+            }
+        };
+
+        // Act
+        var result = await _compositionService.ValidateMixinPathsAsync(schema);
+
+        // Assert
+        Assert.True(result.IsValid);
+        Assert.Empty(result.Errors);
+    }
+
+    [Fact]
+    public async Task ValidateMixinPaths_WithInvalidPointer_ReturnsError()
+    {
+        // Arrange
+        var schema = new SchemaEntity
+        {
+            Name = "test-schema",
+            Mixins = new List<MixinReference>
+            {
+                new MixinReference { Name = "mixin1", Path = "invalid-pointer" }
+            }
+        };
+
+        // Act
+        var result = await _compositionService.ValidateMixinPathsAsync(schema);
+
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.NotEmpty(result.Errors);
+        Assert.Contains(result.Errors, e => e.Code == "INVALID_JSON_POINTER");
+    }
+
+    [Fact]
+    public async Task CheckCircularDependencies_WithSelfReference_ReturnsError()
+    {
+        // Arrange
+        var schema = new SchemaEntity
+        {
+            Name = "test-schema",
+            Mixins = new List<MixinReference>
+            {
+                new MixinReference { Name = "test-schema", Path = "$" }
+            }
+        };
+
+        // Act
+        var result = await _compositionService.CheckCircularDependenciesAsync(schema);
+
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.NotEmpty(result.Errors);
+        Assert.Contains(result.Errors, e => e.Code == "SELF_REFERENCE");
+    }
+}
+
+/// <summary>
+/// Тесты для JsonPointerService
+/// </summary>
+public class JsonPointerServiceTests
+{
+    private readonly JsonPointerService _pointerService;
+
+    public JsonPointerServiceTests()
+    {
+        _pointerService = new JsonPointerService();
+    }
+
+    [Fact]
+    public void ParsePointer_WithValidPointer_ReturnsTokens()
+    {
+        // Arrange
+        var pointer = "/properties/name";
+
+        // Act
+        var tokens = _pointerService.ParsePointer(pointer);
+
+        // Assert
+        Assert.Equal(new[] { "properties", "name" }, tokens);
+    }
+
+    [Fact]
+    public void ParsePointer_WithRootPointer_ReturnsEmptyTokens()
+    {
+        // Arrange
+        var pointer = "/";
+
+        // Act
+        var tokens = _pointerService.ParsePointer(pointer);
+
+        // Assert
+        Assert.Empty(tokens);
+    }
+
+    [Fact]
+    public void ParsePointer_WithDollarRoot_ReturnsEmptyTokens()
+    {
+        // Arrange
+        var pointer = "$";
+
+        // Act
+        var tokens = _pointerService.ParsePointer(pointer);
+
+        // Assert
+        Assert.Empty(tokens);
+    }
+
+    [Fact]
+    public void CreatePointer_WithTokens_ReturnsPointer()
+    {
+        // Arrange
+        var tokens = new[] { "properties", "name" };
+
+        // Act
+        var pointer = _pointerService.CreatePointer(tokens);
+
+        // Assert
+        Assert.Equal("/properties/name", pointer);
+    }
+
+    [Fact]
+    public void IsValidPointer_WithValidPointer_ReturnsTrue()
+    {
+        // Arrange
+        var pointer = "$.properties.name";
+
+        // Act
+        var isValid = _pointerService.IsValidPointer(pointer);
+
+        // Assert
+        Assert.True(isValid);
+    }
+
+    [Fact]
+    public void IsValidPointer_WithInvalidPointer_ReturnsFalse()
+    {
+        // Arrange
+        var pointer = "invalid-pointer";
+
+        // Act
+        var isValid = _pointerService.IsValidPointer(pointer);
+
+        // Assert
+        Assert.False(isValid);
+    }
+}
+
+/// <summary>
 /// Тесты для OperationResult
 /// </summary>
 public class OperationResultTests
