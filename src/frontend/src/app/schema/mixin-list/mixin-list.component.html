@@ -1,0 +1,54 @@
+<div class="mixin-list-container">
+  <div class="header">
+    <h2>Управление миксинами</h2>
+    <button mat-raised-button color="primary" (click)="onCreate()">
+      <mat-icon>add</mat-icon>
+      Создать миксин
+    </button>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    Загрузка...
+  </div>
+
+  <table mat-table [dataSource]="mixins" class="mixins-table" *ngIf="!loading">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Имя</th>
+      <td mat-cell *matCellDef="let mixin">{{ mixin.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="displayName">
+      <th mat-header-cell *matHeaderCellDef>Отображаемое имя</th>
+      <td mat-cell *matCellDef="let mixin">{{ mixin.displayName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Описание</th>
+      <td mat-cell *matCellDef="let mixin">{{ mixin.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Создан</th>
+      <td mat-cell *matCellDef="let mixin">{{ mixin.createdAt | date:'short' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Действия</th>
+      <td mat-cell *matCellDef="let mixin">
+        <button mat-icon-button (click)="onEdit(mixin)" title="Редактировать">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onDelete(mixin)" title="Удалить">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <div class="no-data" *ngIf="!loading && mixins.length === 0">
+    Нет миксинов. Создайте первый миксин.
+  </div>
+</div>
