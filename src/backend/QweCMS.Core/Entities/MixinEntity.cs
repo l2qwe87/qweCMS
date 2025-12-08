@@ -8,6 +8,4 @@ public class MixinEntity : BaseEntity
     public string DisplayName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public object Schema { get; set; } = new { };
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
 }

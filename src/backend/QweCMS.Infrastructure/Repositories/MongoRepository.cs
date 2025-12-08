@@ -11,6 +11,7 @@ public interface IMongoRepository<T> where T : BaseEntity
     Task<T> UpdateAsync(string id, T entity);
     Task<bool> DeleteAsync(string id);
     Task<IEnumerable<T>> FindAsync(FilterDefinition<T> filter);
+    Task<IEnumerable<T>> FindAsync(FilterDefinition<T> filter, SortDefinition<T>? sort = null, int? skip = null, int? limit = null);
     Task<long> CountAsync(FilterDefinition<T> filter);
 }
 
@@ -64,6 +65,22 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
     public async Task<IEnumerable<T>> FindAsync(FilterDefinition<T> filter)
     {
         return await _collection.Find(filter).ToListAsync();
+    }
+
+    public async Task<IEnumerable<T>> FindAsync(FilterDefinition<T> filter, SortDefinition<T>? sort = null, int? skip = null, int? limit = null)
+    {
+        var query = _collection.Find(filter);
+        
+        if (sort != null)
+            query = query.Sort(sort);
+        
+        if (skip.HasValue)
+            query = query.Skip(skip.Value);
+        
+        if (limit.HasValue)
+            query = query.Limit(limit.Value);
+        
+        return await query.ToListAsync();
     }
 
     public async Task<long> CountAsync(FilterDefinition<T> filter)
