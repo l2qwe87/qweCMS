@@ -21,20 +21,20 @@
 - [x] Добавить базовые NuGet пакеты
 
 ### 3. Настроить MongoDB подключение
-- [ ] Установить `MongoDB.Driver` NuGet пакет
-- [ ] Создать `MongoDbContext` класс
-- [ ] Настроить connection string в appsettings.json
-- [ ] Создать базовые репозитории (`IMongoRepository<T>`)
-- [ ] Реализовать базовые CRUD операции
-- [ ] Добавить логирование подключения к БД
+- [x] Установить `MongoDB.Driver` NuGet пакет
+- [x] Создать `MongoDbContext` класс
+- [x] Настроить connection string в appsettings.json
+- [x] Создать базовые репозитории (`IMongoRepository<T>`)
+- [x] Реализовать базовые CRUD операции
+- [x] Добавить логирование подключения к БД
 
 ### 4. Реализовать модели данных
-- [ ] Создать `MixinEntity` модель
-- [ ] Создать `SchemaEntity` модель
-- [ ] Добавить базовые поля (Id, CreatedAt, UpdatedAt)
-- [ ] Создать DTO классы для API
-- [ ] Добавить AutoMapper профили
-- [ ] Создать валидационные атрибуты
+- [x] Создать `MixinEntity` модель
+- [x] Создать `SchemaEntity` модель
+- [x] Добавить базовые поля (Id, CreatedAt, UpdatedAt)
+- [x] Создать DTO классы для API
+- [x] Добавить AutoMapper профили
+- [x] Создать валидационные атрибуты
 
 ### 5. Создать Angular проект
 - [ ] Создать новый Angular проект `ng new qwe-cms`
