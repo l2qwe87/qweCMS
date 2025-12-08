@@ -95,8 +95,8 @@ public interface IMixinService
     /// Валидировать JSON Schema
     /// </summary>
     /// <param name="schema">JSON Schema для валидации</param>
-    /// <returns>True если валидна, иначе false</returns>
-    Task<bool> ValidateSchemaAsync(object schema);
+    /// <returns>Результат валидации с ошибками и предупреждениями</returns>
+    Task<ValidationResult> ValidateSchemaAsync(object schema);
     
     /// <summary>
     /// Получить миксины с пагинацией и поиском

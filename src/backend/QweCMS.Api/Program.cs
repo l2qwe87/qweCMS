@@ -30,6 +30,7 @@ builder.Services.AddSingleton<IMongoRepository<QweCMS.Core.Entities.MixinEntity>
 });
 
 // Add services
+builder.Services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
 builder.Services.AddScoped<IMixinService, MixinService>();
 builder.Services.AddScoped<IMixinRepository, MixinRepository>();
 

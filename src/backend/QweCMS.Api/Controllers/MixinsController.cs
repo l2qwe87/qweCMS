@@ -121,14 +121,14 @@ public class MixinsController : ControllerBase
     /// Валидировать JSON Schema
     /// </summary>
     /// <param name="schema">JSON Schema для валидации</param>
-    /// <returns>True если валидна, иначе false</returns>
+    /// <returns>Результат валидации с ошибками и предупреждениями</returns>
     [HttpPost("validate-schema")]
-    public async Task<ActionResult<bool>> ValidateSchema([FromBody] object schema)
+    public async Task<ActionResult<ValidationResult>> ValidateSchema([FromBody] object schema)
     {
         if (schema == null)
             return BadRequest("Schema cannot be null");
 
-        var isValid = await _mixinService.ValidateSchemaAsync(schema);
-        return Ok(isValid);
+        var validationResult = await _mixinService.ValidateSchemaAsync(schema);
+        return Ok(validationResult);
     }
 }

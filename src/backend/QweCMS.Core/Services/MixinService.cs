@@ -6,10 +6,12 @@ namespace QweCMS.Core.Services;
 public class MixinService : IMixinService
 {
     private readonly IMixinRepository _repository;
+    private readonly IJsonSchemaValidationService _validationService;
 
-    public MixinService(IMixinRepository repository)
+    public MixinService(IMixinRepository repository, IJsonSchemaValidationService validationService)
     {
         _repository = repository;
+        _validationService = validationService;
     }
 
     /// <inheritdoc/>
@@ -27,9 +29,11 @@ public class MixinService : IMixinService
     /// <inheritdoc/>
     public async Task<MixinEntity> CreateAsync(MixinEntity entity)
     {
-        if (!ValidateSchema(entity.Schema))
+        var validationResult = _validationService.ValidateSchema(entity.Schema);
+        if (!validationResult.IsValid)
         {
-            throw new ArgumentException("Invalid JSON Schema");
+            var errorMessage = string.Join("; ", validationResult.Errors.Select(e => e.Message));
+            throw new ArgumentException($"Invalid JSON Schema: {errorMessage}");
         }
 
         return await _repository.CreateAsync(entity);
@@ -38,9 +42,11 @@ public class MixinService : IMixinService
     /// <inheritdoc/>
     public async Task<MixinEntity> UpdateAsync(string id, MixinEntity entity)
     {
-        if (!ValidateSchema(entity.Schema))
+        var validationResult = _validationService.ValidateSchema(entity.Schema);
+        if (!validationResult.IsValid)
         {
-            throw new ArgumentException("Invalid JSON Schema");
+            var errorMessage = string.Join("; ", validationResult.Errors.Select(e => e.Message));
+            throw new ArgumentException($"Invalid JSON Schema: {errorMessage}");
         }
 
         return await _repository.UpdateAsync(id, entity);
@@ -53,9 +59,10 @@ public class MixinService : IMixinService
     }
 
     /// <inheritdoc/>
-    public Task<bool> ValidateSchemaAsync(object schema)
+    public Task<ValidationResult> ValidateSchemaAsync(object schema)
     {
-        return Task.FromResult(ValidateSchema(schema));
+        var result = _validationService.ValidateSchema(schema);
+        return Task.FromResult(result);
     }
 
     /// <inheritdoc/>
@@ -64,29 +71,5 @@ public class MixinService : IMixinService
         return await _repository.GetPagedAsync(parameters);
     }
 
-    private bool ValidateSchema(object schema)
-    {
-        try
-        {
-            var json = System.Text.Json.JsonSerializer.Serialize(schema);
-            var document = System.Text.Json.JsonDocument.Parse(json);
-            
-            if (document.RootElement.ValueKind != System.Text.Json.JsonValueKind.Object)
-            {
-                return false;
-            }
 
-            if (!document.RootElement.TryGetProperty("type", out var typeProperty) ||
-                typeProperty.GetString() != "object")
-            {
-                return false;
-            }
-
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
 }
