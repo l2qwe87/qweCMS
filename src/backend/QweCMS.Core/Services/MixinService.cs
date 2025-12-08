@@ -12,16 +12,19 @@ public class MixinService : IMixinService
         _repository = repository;
     }
 
+    /// <inheritdoc/>
     public async Task<IEnumerable<MixinEntity>> GetAllAsync()
     {
         return await _repository.GetAllAsync();
     }
 
+    /// <inheritdoc/>
     public async Task<MixinEntity?> GetByIdAsync(string id)
     {
         return await _repository.GetByIdAsync(id);
     }
 
+    /// <inheritdoc/>
     public async Task<MixinEntity> CreateAsync(MixinEntity entity)
     {
         if (!ValidateSchema(entity.Schema))
@@ -32,6 +35,7 @@ public class MixinService : IMixinService
         return await _repository.CreateAsync(entity);
     }
 
+    /// <inheritdoc/>
     public async Task<MixinEntity> UpdateAsync(string id, MixinEntity entity)
     {
         if (!ValidateSchema(entity.Schema))
@@ -42,16 +46,19 @@ public class MixinService : IMixinService
         return await _repository.UpdateAsync(id, entity);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> DeleteAsync(string id)
     {
         return await _repository.DeleteAsync(id);
     }
 
+    /// <inheritdoc/>
     public Task<bool> ValidateSchemaAsync(object schema)
     {
         return Task.FromResult(ValidateSchema(schema));
     }
 
+    /// <inheritdoc/>
     public async Task<PagedResult<MixinEntity>> GetPagedAsync(SearchParameters parameters)
     {
         return await _repository.GetPagedAsync(parameters);

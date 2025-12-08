@@ -15,31 +15,37 @@ public class MixinRepository : IMixinRepository
         _repository = repository;
     }
 
+    /// <inheritdoc/>
     public async Task<IEnumerable<MixinEntity>> GetAllAsync()
     {
         return await _repository.GetAllAsync();
     }
 
+    /// <inheritdoc/>
     public async Task<MixinEntity?> GetByIdAsync(string id)
     {
         return await _repository.GetByIdAsync(id);
     }
 
+    /// <inheritdoc/>
     public async Task<MixinEntity> CreateAsync(MixinEntity entity)
     {
         return await _repository.CreateAsync(entity);
     }
 
+    /// <inheritdoc/>
     public async Task<MixinEntity> UpdateAsync(string id, MixinEntity entity)
     {
         return await _repository.UpdateAsync(id, entity);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> DeleteAsync(string id)
     {
         return await _repository.DeleteAsync(id);
     }
 
+    /// <inheritdoc/>
     public async Task<PagedResult<MixinEntity>> GetPagedAsync(SearchParameters parameters)
     {
         var filter = BuildFilter(parameters);

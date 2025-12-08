@@ -5,6 +5,9 @@ using QweCMS.Core.Models;
 
 namespace QweCMS.Api.Controllers;
 
+/// <summary>
+/// Контроллер для управления миксинами в системе QweCMS
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class MixinsController : ControllerBase
@@ -16,6 +19,10 @@ public class MixinsController : ControllerBase
         _mixinService = mixinService;
     }
 
+    /// <summary>
+    /// Получить все миксины
+    /// </summary>
+    /// <returns>Коллекция всех миксинов</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MixinEntity>>> GetAll()
     {
@@ -30,6 +37,11 @@ public class MixinsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Получить миксины с пагинацией и поиском
+    /// </summary>
+    /// <param name="parameters">Параметры поиска и пагинации</param>
+    /// <returns>Результат с пагинацией</returns>
     [HttpGet("paged")]
     public async Task<ActionResult<PagedResult<MixinEntity>>> GetPaged([FromQuery] SearchParameters parameters)
     {
@@ -50,6 +62,11 @@ public class MixinsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Получить миксин по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор миксина</param>
+    /// <returns>Миксин или 404 если не найден</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<MixinEntity>> GetById(string id)
     {
@@ -71,6 +88,11 @@ public class MixinsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Создать новый миксин
+    /// </summary>
+    /// <param name="mixin">Данные миксина для создания</param>
+    /// <returns>Созданный миксин с location header</returns>
     [HttpPost]
     public async Task<ActionResult<MixinEntity>> Create([FromBody] MixinEntity mixin)
     {
@@ -85,6 +107,12 @@ public class MixinsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Обновить существующий миксин
+    /// </summary>
+    /// <param name="id">Идентификатор миксина</param>
+    /// <param name="mixin">Обновленные данные миксина</param>
+    /// <returns>Обновленный миксин</returns>
     [HttpPut("{id}")]
     public async Task<ActionResult<MixinEntity>> Update(string id, [FromBody] MixinEntity mixin)
     {
@@ -109,6 +137,11 @@ public class MixinsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Удалить миксин по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор миксина</param>
+    /// <returns>204 No Content или 404 если не найден</returns>
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(string id)
     {
@@ -130,6 +163,11 @@ public class MixinsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Валидировать JSON Schema
+    /// </summary>
+    /// <param name="schema">JSON Schema для валидации</param>
+    /// <returns>True если валидна, иначе false</returns>
     [HttpPost("validate-schema")]
     public async Task<ActionResult<bool>> ValidateSchema([FromBody] object schema)
     {
