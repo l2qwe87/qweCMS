@@ -23,16 +23,27 @@ builder.Services.Configure<MongoSettings>(
 builder.Services.AddSingleton<MongoDbContext>();
 
 // Add repositories
-builder.Services.AddSingleton<IMongoRepository<QweCMS.Core.Entities.MixinEntity>, MongoRepository<QweCMS.Core.Entities.MixinEntity>>(provider => 
+builder.Services.AddSingleton<IMongoRepository<QweCMS.Core.Entities.MixinEntity>, MongoRepository<QweCMS.Core.Entities.MixinEntity>>(provider =>
 {
     var dbContext = provider.GetRequiredService<MongoDbContext>();
     return new MongoRepository<QweCMS.Core.Entities.MixinEntity>(dbContext.Database, "mixins");
+});
+
+builder.Services.AddSingleton<IMongoRepository<QweCMS.Core.Entities.SchemaEntity>, MongoRepository<QweCMS.Core.Entities.SchemaEntity>>(provider =>
+{
+    var dbContext = provider.GetRequiredService<MongoDbContext>();
+    return new MongoRepository<QweCMS.Core.Entities.SchemaEntity>(dbContext.Database, "schemas");
 });
 
 // Add services
 builder.Services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
 builder.Services.AddScoped<IMixinService, MixinService>();
 builder.Services.AddScoped<IMixinRepository, MixinRepository>();
+builder.Services.AddScoped<ISchemaService, SchemaService>();
+builder.Services.AddScoped<ISchemaRepository, SchemaRepository>();
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(QweCMS.Core.Mapping.SchemaMappingProfile));
 
 // Add logging
 builder.Services.AddLogging();

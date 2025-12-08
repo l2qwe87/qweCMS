@@ -1,5 +1,3 @@
-using QweCMS.Core.Entities;
-
 namespace QweCMS.Core.Entities;
 
 public class SchemaEntity : BaseEntity
